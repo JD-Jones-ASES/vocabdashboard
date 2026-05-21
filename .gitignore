@@ -1,0 +1,19 @@
+# Claude harness — local settings, never published
+.claude/
+
+# OS metadata
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor backups
+*.swp
+*.swo
+*~
+
+# Logs / temp
+*.log
+*.tmp
+
+# Node (in case we add tooling later)
+node_modules/

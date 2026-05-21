@@ -1,0 +1,195 @@
+/* =================================================================
+   VocabDashboard — Print styles (print.css)
+   Loaded with media="print" so these rules only apply in the
+   browser's print dialog / Save-as-PDF flow.
+   ================================================================= */
+
+@page {
+  size: letter;
+  margin: 0.5in;
+}
+
+/* Reset background colors so they don't waste ink and so colored
+   accents become subtle hairlines. */
+* {
+  box-shadow: none !important;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+/* Projector overlay is for live presentation only; never print it. */
+.projector-overlay { display: none !important; }
+
+html, body {
+  background: white !important;
+  color: black !important;
+  font-size: 11pt;
+}
+
+/* Hide everything not relevant to the printed page. */
+.no-print,
+.app-header,
+.app-nav,
+.app-footer,
+.view-toolbar,
+.form,
+.form-actions,
+.vetting-controls,
+.app-title .subtitle {
+  display: none !important;
+}
+
+.app-main {
+  max-width: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Only the active view is shown (already handled by [hidden] in JS,
+   but ensure no others slip through). */
+.view[hidden] { display: none !important; }
+
+/* ---------- Browse view print ---------- */
+/* Browse isn't really meant for print, but if the user does, lay out
+   in a clean two-column reference list. */
+.view-browse .term-grid {
+  grid-template-columns: repeat(2, 1fr) !important;
+  gap: 6px !important;
+}
+.view-browse .term-card {
+  break-inside: avoid;
+  border: 1px solid #aaa;
+  box-shadow: none;
+  padding: 8px 10px;
+  background: white !important;
+}
+.view-browse .term-card .term-img { max-height: 70px; }
+.view-browse .term-card .term-meta { font-size: 9pt; }
+
+/* ---------- Flashcards print ---------- */
+.flashcard-output { background: none; padding: 0; }
+
+.flashcard-page-label { display: none; }
+
+.flashcard-page {
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  page-break-after: always;
+  page-break-inside: avoid;
+  /* Each grid fills the printable area. */
+  width: 100%;
+  height: 9.5in;   /* letter (11in) - 0.5in margins x2 - small slack */
+  gap: 0 !important;
+}
+.flashcard-page:last-child { page-break-after: auto; }
+
+.flashcard {
+  border: 1px dashed #333 !important;
+  background: white !important;
+  border-radius: 0 !important;
+  page-break-inside: avoid;
+}
+
+/* Mirror the backs so they align with fronts when paper is flipped. */
+.fc-backs { direction: rtl !important; }
+.fc-backs > .flashcard { direction: ltr; }
+
+/* ---------- Worksheet print ---------- */
+.worksheet-output,
+.answerkey-output {
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  background: white !important;
+}
+
+.worksheet-output li,
+.answerkey-output li {
+  page-break-inside: avoid;
+}
+
+.worksheet-output .ws-meta,
+.answerkey-output .ws-meta {
+  border-bottom: 1px solid #333;
+}
+
+/* Hide whichever output the print button didn't request. The print buttons
+   set a body class so the right output prints. */
+body.print-worksheet .answerkey-output { display: none !important; }
+body.print-worksheet .view-worksheets > *:not(.worksheet-output) { display: none !important; }
+body.print-answerkey .worksheet-output { display: none !important; }
+body.print-answerkey .view-worksheets > *:not(.answerkey-output) { display: none !important; }
+body.print-answerkey .answerkey-output { display: block !important; }
+
+/* ---------- Dictionary print ---------- */
+.dict-print-header {
+  display: block !important;
+  margin: 0 0 14px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #333;
+}
+.dict-print-header h1 {
+  font-size: 18pt;
+  margin: 0 0 2px;
+  color: black !important;
+}
+.dict-print-header p {
+  font-size: 10pt;
+  margin: 0;
+  color: #555 !important;
+}
+
+.dict-output {
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  background: white !important;
+}
+
+.dict-output.cols-2 .dict-list {
+  column-count: 2 !important;
+  column-gap: 18pt !important;
+  column-rule: 1px solid #ccc !important;
+}
+.dict-output.cols-1 .dict-list {
+  column-count: 1 !important;
+}
+
+.dict-unit-header {
+  font-size: 12pt !important;
+  color: black !important;
+  border-bottom: 1.5pt solid #333 !important;
+  margin: 12pt 0 6pt !important;
+  page-break-after: avoid;
+  break-after: avoid;
+  column-span: all; /* If alphabetical with letter headers, span columns. */
+}
+
+.dict-entry {
+  font-size: 9pt !important;
+  padding: 4pt 0 !important;
+  border-top: 0.5pt dashed #bbb !important;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+.dict-entry:first-child { border-top: none !important; }
+
+.dict-headword { margin-bottom: 1pt !important; }
+.dict-term-en { color: black !important; }
+.dict-term-es { color: #444 !important; }
+
+.dict-img {
+  max-height: 60pt !important;
+  margin: 2pt auto !important;
+  border: 0.5pt solid #aaa !important;
+}
+
+.dict-def { font-size: 9pt !important; }
+.dict-def-es { color: #555 !important; }
+.dict-source { font-size: 7pt !important; color: #777 !important; }

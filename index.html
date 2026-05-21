@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>VocabDashboard — Grade 6 Science Vocabulary</title>
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/print.css" media="print">
+</head>
+<body>
+
+  <!-- ============================================================ -->
+  <!-- Header & Navigation                                          -->
+  <!-- ============================================================ -->
+  <header class="app-header no-print">
+    <div class="app-title">
+      <h1>VocabDashboard</h1>
+      <p class="subtitle">Grade 6 Science · Bilingual Vocabulary</p>
+    </div>
+    <nav class="app-nav">
+      <button class="nav-btn" data-nav="browse" aria-current="page">
+        <span class="nav-icon" aria-hidden="true">&#x1F50D;</span>
+        <span class="nav-label">Browse</span>
+      </button>
+      <button class="nav-btn" data-nav="flashcards">
+        <span class="nav-icon" aria-hidden="true">&#x1F4D1;</span>
+        <span class="nav-label">Flashcards</span>
+      </button>
+      <button class="nav-btn" data-nav="worksheets">
+        <span class="nav-icon" aria-hidden="true">&#x1F4DD;</span>
+        <span class="nav-label">Worksheets</span>
+      </button>
+      <button class="nav-btn" data-nav="dictionary">
+        <span class="nav-icon" aria-hidden="true">&#x1F4DA;</span>
+        <span class="nav-label">Dictionary</span>
+      </button>
+      <button class="nav-btn nav-btn-random" id="random-term-btn" title="Pick a random term and project it">
+        <span class="nav-icon" aria-hidden="true">&#x1F3B2;</span>
+        <span class="nav-label">Random</span>
+      </button>
+    </nav>
+  </header>
+
+  <main class="app-main">
+
+    <!-- ============================================================ -->
+    <!-- BROWSE View                                                 -->
+    <!-- ============================================================ -->
+    <section data-view="browse" class="view view-browse" aria-label="Browse vocabulary">
+
+      <!-- First-visit welcome banner (dismissible, localStorage-backed) -->
+      <div id="welcome-banner" class="welcome-banner no-print" hidden>
+        <div class="welcome-content">
+          <strong>Welcome!</strong> This is your Grade 6 Science vocabulary tool.
+          Type in the search box below to look up a term, or pick a unit.
+          Use <strong>Flashcards</strong> to study and <strong>Worksheets</strong> to practice.
+          The <strong>🎲 Random</strong> button picks a term at random — perfect for a quick warm-up.
+        </div>
+        <button type="button" id="welcome-dismiss" class="welcome-close" aria-label="Dismiss welcome message">&times;</button>
+      </div>
+
+      <!-- Quick Start panel — common workflows in two clicks -->
+      <div class="quickstart-panel no-print">
+        <div class="quickstart-label">
+          <span class="quickstart-icon" aria-hidden="true">&#x26A1;</span>
+          <span>Quick Start</span>
+        </div>
+        <select id="quickstart-unit" class="quickstart-unit" aria-label="Pick a unit">
+          <option value="">Pick a unit…</option>
+        </select>
+        <button type="button" class="btn btn-primary quickstart-btn" data-quickstart="present-flashcards" disabled>📑 Project flashcards</button>
+        <button type="button" class="btn btn-secondary quickstart-btn" data-quickstart="print-flashcards" disabled>🖨 Print flashcards</button>
+        <button type="button" class="btn btn-primary quickstart-btn" data-quickstart="present-quiz" disabled>📝 Project MC quiz</button>
+        <button type="button" class="btn btn-secondary quickstart-btn" data-quickstart="print-quiz" disabled>🖨 Print MC quiz</button>
+      </div>
+
+      <div class="view-toolbar no-print">
+        <input
+          type="search"
+          id="browse-search"
+          class="search-input"
+          placeholder="Search terms in English or Spanish…"
+          autocomplete="off"
+        >
+        <select id="browse-unit-filter" class="unit-filter" aria-label="Filter by unit">
+          <option value="">All units</option>
+        </select>
+        <select id="browse-lang-filter" class="unit-filter" aria-label="Filter by language">
+          <option value="bilingual">Bilingual</option>
+          <option value="en">English only</option>
+          <option value="es">Spanish only</option>
+        </select>
+        <span class="result-count" id="browse-result-count"></span>
+      </div>
+      <div id="browse-results" class="term-grid"></div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- FLASHCARDS View                                             -->
+    <!-- ============================================================ -->
+    <section data-view="flashcards" class="view view-flashcards" hidden aria-label="Flashcards">
+      <div class="view-toolbar no-print">
+        <h2 class="view-heading">Flashcards</h2>
+        <p class="view-hint">Pick units and a layout, then click <strong>Print / Save PDF</strong>. The "backs" page is mirrored so when you flip the paper vertically, the backs line up with the fronts.</p>
+      </div>
+
+      <form id="flashcard-form" class="form no-print" onsubmit="return false;">
+        <fieldset class="form-group">
+          <legend>Units</legend>
+          <div id="flashcard-units" class="checkbox-grid"></div>
+        </fieldset>
+
+        <fieldset class="form-group">
+          <legend>Language mode</legend>
+          <label class="radio"><input type="radio" name="fc-lang" value="bilingual" checked> Bilingual (EN + ES on each side)</label>
+          <label class="radio"><input type="radio" name="fc-lang" value="en"> English only</label>
+          <label class="radio"><input type="radio" name="fc-lang" value="es"> Spanish only</label>
+          <label class="radio"><input type="radio" name="fc-lang" value="cross"> Cross-language (EN term → ES term)</label>
+        </fieldset>
+
+        <fieldset class="form-group">
+          <legend>Cards per page</legend>
+          <label class="radio"><input type="radio" name="fc-per-page" value="1"> 1 (jumbo)</label>
+          <label class="radio"><input type="radio" name="fc-per-page" value="2"> 2</label>
+          <label class="radio"><input type="radio" name="fc-per-page" value="4"> 4</label>
+          <label class="radio"><input type="radio" name="fc-per-page" value="6" checked> 6 (recommended)</label>
+          <label class="radio"><input type="radio" name="fc-per-page" value="9"> 9</label>
+        </fieldset>
+
+        <fieldset class="form-group">
+          <legend>Front shows</legend>
+          <label class="radio"><input type="radio" name="fc-front" value="term" checked> Term (definition on back)</label>
+          <label class="radio"><input type="radio" name="fc-front" value="def"> Definition (term on back)</label>
+        </fieldset>
+
+        <fieldset class="form-group">
+          <legend>Image</legend>
+          <label class="checkbox-line"><input type="checkbox" id="fc-include-images" checked> Include image on card (when available)</label>
+        </fieldset>
+
+        <div class="form-actions">
+          <button type="button" id="fc-preview-btn" class="btn btn-primary">Preview cards</button>
+          <button type="button" id="fc-present-btn" class="btn btn-primary" disabled>🎬 Present</button>
+          <button type="button" id="fc-print-btn" class="btn btn-secondary" disabled>🖨 Print / Save PDF</button>
+          <span id="fc-status" class="status-text"></span>
+        </div>
+      </form>
+
+      <div id="flashcard-output" class="flashcard-output"></div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- WORKSHEETS View                                             -->
+    <!-- ============================================================ -->
+    <section data-view="worksheets" class="view view-worksheets" hidden aria-label="Worksheets">
+      <div class="view-toolbar no-print">
+        <h2 class="view-heading">Worksheet Generator</h2>
+        <p class="view-hint">Each worksheet has a <strong>seed</strong> (a 4-character code) so you can reproduce it later and regenerate the answer key. Variant B = enter a different seed for the same questions in a different order.</p>
+      </div>
+
+      <form id="worksheet-form" class="form no-print" onsubmit="return false;">
+        <fieldset class="form-group">
+          <legend>Units</legend>
+          <div id="ws-units" class="checkbox-grid"></div>
+        </fieldset>
+
+        <fieldset class="form-group">
+          <legend>Worksheet type</legend>
+          <label class="radio"><input type="radio" name="ws-type" value="mc" checked> Multiple Choice</label>
+          <label class="radio"><input type="radio" name="ws-type" value="tf"> True / False</label>
+          <label class="radio"><input type="radio" name="ws-type" value="matching"> Matching</label>
+          <label class="radio"><input type="radio" name="ws-type" value="fillblank"> Fill in the Blank</label>
+          <label class="radio"><input type="radio" name="ws-type" value="wordsearch"> Word Search</label>
+        </fieldset>
+
+        <fieldset class="form-group">
+          <legend>Language</legend>
+          <label class="radio"><input type="radio" name="ws-lang" value="en" checked> English</label>
+          <label class="radio"><input type="radio" name="ws-lang" value="es"> Spanish</label>
+        </fieldset>
+
+        <fieldset class="form-group">
+          <legend>Options</legend>
+          <label class="input-line">Number of questions: <input type="number" id="ws-num" min="5" max="40" value="10" step="1"></label>
+          <label class="input-line">Seed (4 chars): <input type="text" id="ws-seed" maxlength="4" pattern="[A-Za-z0-9]{1,4}" placeholder="auto"></label>
+          <label class="checkbox-line"><input type="checkbox" id="ws-include-bank"> Include word bank (fill-in-the-blank only)</label>
+        </fieldset>
+
+        <div class="form-actions">
+          <button type="button" id="ws-generate-btn" class="btn btn-primary">Generate worksheet</button>
+          <button type="button" id="ws-present-btn" class="btn btn-primary" disabled>🎬 Present</button>
+          <button type="button" id="ws-print-ws-btn" class="btn btn-secondary" disabled>🖨 Print worksheet</button>
+          <button type="button" id="ws-print-key-btn" class="btn btn-secondary" disabled>🖨 Print answer key</button>
+          <span id="ws-status" class="status-text"></span>
+        </div>
+      </form>
+
+      <div id="worksheet-output" class="worksheet-output"></div>
+      <div id="answerkey-output" class="answerkey-output" hidden></div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- DICTIONARY View — printable glossary                        -->
+    <!-- ============================================================ -->
+    <section data-view="dictionary" class="view view-dictionary" hidden aria-label="Dictionary">
+      <div class="view-toolbar no-print">
+        <h2 class="view-heading">Dictionary</h2>
+        <p class="view-hint">Generate a clean, printable glossary. Pick units, language, and layout &mdash; then click <strong>Print / Save PDF</strong>. Great as a study handout, reference page, or take-home.</p>
+      </div>
+
+      <form id="dictionary-form" class="form no-print" onsubmit="return false;">
+        <fieldset class="form-group">
+          <legend>Units</legend>
+          <div id="dict-units" class="checkbox-grid"></div>
+          <div class="form-mini-actions">
+            <button type="button" id="dict-select-all" class="btn-link">Select all</button>
+            <button type="button" id="dict-select-none" class="btn-link">Select none</button>
+          </div>
+        </fieldset>
+
+        <fieldset class="form-group">
+          <legend>Language</legend>
+          <label class="radio"><input type="radio" name="dict-lang" value="bilingual" checked> Bilingual (English + Spanish)</label>
+          <label class="radio"><input type="radio" name="dict-lang" value="en"> English only</label>
+          <label class="radio"><input type="radio" name="dict-lang" value="es"> Spanish only</label>
+        </fieldset>
+
+        <fieldset class="form-group">
+          <legend>Sort</legend>
+          <label class="radio"><input type="radio" name="dict-sort" value="unit" checked> By unit (in curriculum order)</label>
+          <label class="radio"><input type="radio" name="dict-sort" value="en"> Alphabetical (English)</label>
+          <label class="radio"><input type="radio" name="dict-sort" value="es"> Alphabetical (Spanish)</label>
+        </fieldset>
+
+        <fieldset class="form-group">
+          <legend>Layout</legend>
+          <label class="radio"><input type="radio" name="dict-cols" value="1"> 1 column (spacious)</label>
+          <label class="radio"><input type="radio" name="dict-cols" value="2" checked> 2 columns (denser)</label>
+        </fieldset>
+
+        <fieldset class="form-group">
+          <legend>Include</legend>
+          <label class="checkbox-line"><input type="checkbox" id="dict-include-images" checked> Images (where available)</label>
+          <label class="checkbox-line"><input type="checkbox" id="dict-include-sources"> Image source credits</label>
+        </fieldset>
+
+        <div class="form-actions">
+          <button type="button" id="dict-generate-btn" class="btn btn-primary">Update preview</button>
+          <button type="button" id="dict-print-btn" class="btn btn-secondary">Print / Save PDF</button>
+          <span id="dict-status" class="status-text"></span>
+        </div>
+      </form>
+
+      <!-- Printed header (hidden on screen, shown when printing) -->
+      <header class="dict-print-header">
+        <h1>Grade 6 Science Vocabulary</h1>
+        <p id="dict-print-title">Grade 6 Science · Bilingual Vocabulary</p>
+      </header>
+
+      <div id="dict-output" class="dict-output cols-2"></div>
+    </section>
+
+  </main>
+
+  <footer class="app-footer no-print">
+    <p>VocabDashboard &middot; works fully offline &middot; <span id="footer-stats"></span></p>
+  </footer>
+
+  <!-- Data files loaded as <script> to avoid file:// fetch CORS issues -->
+  <script src="js/data/vocab.js"></script>
+  <script src="js/data/images.js"></script>
+  <!-- Utilities -->
+  <script src="js/rng.js"></script>
+  <script src="js/projector.js"></script>
+  <!-- Views -->
+  <script src="js/browse.js"></script>
+  <script src="js/flashcards.js"></script>
+  <script src="js/worksheets.js"></script>
+  <script src="js/dictionary.js"></script>
+  <!-- App bootstrap (must be last) -->
+  <script src="js/app.js"></script>
+</body>
+</html>
