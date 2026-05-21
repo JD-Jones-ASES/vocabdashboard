@@ -1,17 +1,53 @@
 # VocabDashboard
 
 A printable, classroom-ready dashboard for the Grade 6 Science bilingual vocabulary curriculum.
-Runs entirely in your browser — no internet, no accounts, no installation.
+Runs in any browser — no accounts, no installation.
+
+## 🌐 Live site (share this with students)
+
+**https://jd-jones-ases.github.io/vocabdashboard/**
+
+Students can open this link on any device — phone, tablet, Chromebook, laptop — to study at home. See **[Sharing in Google Classroom](#sharing-in-google-classroom)** below.
 
 ---
 
 ## How to open
 
-1. Find this folder on your computer: `C:\GitHub_Files\VocabDashboard\`
-2. Double-click **`index.html`**. It will open in your default browser (Chrome or Edge work best).
-3. That's it. Everything else happens inside the browser tab.
+**Online (for students):** just visit the live link above.
+
+**Offline (on your own computer):**
+1. Find this folder: `C:\GitHub_Files\VocabDashboard\`
+2. Double-click **`index.html`**. It opens in your default browser (Chrome or Edge work best).
+3. That's it. Everything happens inside the browser tab.
 
 You can drag `index.html` onto your desktop as a shortcut for easy access.
+
+---
+
+## Sharing in Google Classroom
+
+The dashboard is hosted at a public link, so sharing it with students takes about 30 seconds:
+
+1. Copy the live URL: **https://jd-jones-ases.github.io/vocabdashboard/**
+2. In Google Classroom, go to your class → **Classwork** (or **Stream**).
+3. Click **Create → Assignment** (or **Create → Material** if it's just a study resource, or post an **Announcement** on the Stream).
+4. Give it a title like "Vocabulary Study Tool" and **paste the URL** into the description. Classroom turns it into a clickable link automatically.
+5. Assign to your class. Students click the link and the dashboard opens — no login needed.
+
+**Tips:**
+- Post it once at the start of a unit as **Material** so it stays pinned for the whole unit.
+- You can paste the link into an assignment description too — e.g., "Study Unit 3 vocabulary using [this tool], then complete the attached worksheet."
+- **Progress is per-device.** A student's flashcard study state is saved in *that browser only* — it won't follow them between their phone and a school Chromebook. The vocabulary, flashcards, worksheets, and dictionary all work everywhere; only the saved UI state (like a dismissed welcome message) is per-device. No student data is collected or stored anywhere online.
+
+### Updating the live site later
+
+When you change the vocabulary or add images, push the changes to GitHub and the live site updates automatically within a minute:
+
+```
+git add .
+git commit -m "Describe your change"
+git push
+```
 
 ---
 
